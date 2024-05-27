@@ -110,6 +110,11 @@ def parse(fp, mapper=dict, merge_duplicate_keys=True, escaped=True):
             continue
 
         if expect_bracket:
+            # if the line is "" it means the block is empty
+            if line[0:2] == '""':
+                stack.pop()
+                expect_bracket = False
+                continue
             raise SyntaxError("vdf.parse: expected openning bracket",
                               (getattr(fp, 'name', '<%s>' % fp.__class__.__name__), lineno, 1, line))
 
